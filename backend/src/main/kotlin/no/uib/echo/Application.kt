@@ -29,5 +29,5 @@ fun Application.module() {
     userRoutes()
 
 
-    PostSetup(environment.config)
+    PostSetup()
 }

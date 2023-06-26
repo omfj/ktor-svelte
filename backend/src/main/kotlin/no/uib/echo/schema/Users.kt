@@ -1,36 +1,35 @@
 package no.uib.echo.schema
 
-import java.time.LocalDateTime
 import java.util.UUID
-import kotlinx.serialization.Contextual
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import no.uib.echo.CryptoService
 import no.uib.echo.DatabaseFactory.dbQuery
+import no.uib.echo.utils.UUIDSerializer
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.javatime.CurrentDateTime
-import org.jetbrains.exposed.sql.javatime.datetime
+import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
+import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.select
 
 @Serializable
 data class User(
-    @Contextual
+    @Serializable(with = UUIDSerializer::class)
     val id: UUID,
     val username: String,
     val email: String,
     val hashedPassword: String,
-    @Contextual
     val createdAt: LocalDateTime,
-    @Contextual
-    val updatedAt: LocalDateTime
+    val updatedAt: LocalDateTime,
 )
 
 @Serializable
 data class UserProfile(
-    val id: String,
+    @Serializable(with = UUIDSerializer::class)
+    val id: UUID,
     val username: String,
     val email: String,
 )
@@ -39,7 +38,7 @@ object Users : Table() {
     val id: Column<UUID> = uuid("id").autoGenerate()
     val username: Column<String> = varchar("username", length = 50).uniqueIndex().index("username_index")
     val email: Column<String> = varchar("email", length = 50).uniqueIndex().index("email_index")
-    val hashedPassword: Column<String> = varchar("hashedPassword", length = 120)
+    val hashedPassword: Column<String> = varchar("hashed_password", length = 120)
     val createdAt: Column<LocalDateTime> = datetime("created_at").defaultExpression(CurrentDateTime)
     val updatedAt: Column<LocalDateTime> = datetime("updated_at").defaultExpression(CurrentDateTime)
 

@@ -25,10 +25,10 @@ repositories {
 
 dependencies {
     // Application dependencies
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-kotlin-datetime:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
 
     implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
@@ -42,6 +42,8 @@ dependencies {
     implementation("io.ktor:ktor-server-resources:$ktor_version")
     implementation("io.ktor:ktor-server-auto-head-response-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
+
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
 
     implementation("ch.qos.logback:logback-classic:$logback_version")
 

@@ -23,22 +23,9 @@ data class UserSession(val id: UUID) : Principal
 
 fun Application.configureSessions(config: ApplicationConfig) {
     install(Sessions) {
-        cookie<UserSession>("USER_SESSION") {
+        cookie<UserSession>("session") {
             cookie.extensions["SameSite"] = "lax"
             cookie.secure = config.propertyOrNull("ktor.development")?.getString().toBoolean() != true
         }
     }
 }
-
-suspend fun createSession(call: ApplicationCall, userId: UUID) = dbQuery {
-    val sessionId = UUID.randomUUID()
-
-    SessionsTable.insert {
-        it[id] = sessionId
-        it[this.userId] = userId
-        it[expires] = LocalDateTime.now().plusDays(5)
-    }
-
-    call.sessions.set(UserSession(sessionId))
-}
-

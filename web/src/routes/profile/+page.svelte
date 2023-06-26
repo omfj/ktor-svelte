@@ -1,20 +1,24 @@
 <script lang="ts">
-	import { user } from '$lib/stores/user';
+	import type { PageServerData } from './$types';
+
+	export let data: PageServerData;
 </script>
 
-<h1 class="text-3xl font-medium mb-5">Profile</h1>
+<h1 class="text-3xl font-medium mb-10">Profile</h1>
 
-<div class="flex flex-col gap-2">
-	<p class="font-medium text-lg">UUID</p>
-	<p>{$user?.id}</p>
-</div>
+<div class="space-y-4">
+	<div>
+		<p class="text-xs">UUID:</p>
+		<p class="text-lg">{data.user.id}</p>
+	</div>
 
-<div class="flex flex-col gap-2">
-	<p class="font-medium text-lg">Username</p>
-	<p>{$user?.username}</p>
-</div>
+	<div>
+		<p class="text-xs">Username:</p>
+		<p class="text-lg">{data.user.username}</p>
+	</div>
 
-<div class="flex flex-col gap-2">
-	<p class="font-medium text-lg">Email</p>
-	<p>{$user?.email}</p>
+	<div>
+		<p class="text-xs">Email:</p>
+		<p class="text-lg">{data.user.email}</p>
+	</div>
 </div>

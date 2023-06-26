@@ -2,9 +2,7 @@ package no.uib.echo
 
 import io.ktor.server.config.ApplicationConfig
 
-class PostSetup constructor(
-    config: ApplicationConfig
-) {
+class PostSetup {
     init {
         printLogo()
     }

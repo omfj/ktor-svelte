@@ -69,7 +69,7 @@ fun Route.getSelf() {
         }
 
         call.respond(HttpStatusCode.OK, UserProfile(
-            id = user.id.toString(),
+            id = user.id,
             username = user.username,
             email = user.email,
         ))

@@ -1,29 +1,32 @@
-<script lang="ts">
-	import { logout, user } from '$lib/stores/user';
+<script>
+	import { enhance } from '$app/forms';
+	import { user } from '$lib/stores';
 </script>
 
-<header class="bg-blue-400 p-3 text-white flex justify-between items-center mb-10">
-	<h1 class="text-3xl font-medium">echo</h1>
+<header class="p-3 flex justify-between items-center mb-10">
+	<h1 class="text-3xl font-black">
+		<a href="/">ORCA</a>
+	</h1>
 
 	<nav>
-		<ul class="flex">
-			<li class="mr-3">
-				<a href="/" class="hover:text-gray-200">Home</a>
-			</li>
-			{#if !$user}
-				<li class="mr-3">
-					<a href="/login" class="hover:text-gray-200">Login</a>
-				</li>
-				<li class="mr-3">
-					<a href="/register" class="hover:text-gray-200">Register</a>
-				</li>
-			{/if}
+		<ul class="flex gap-4 text-sm">
 			{#if $user}
-				<li class="mr-3">
-					<a href="/profile">Profile</a>
+				<li>
+					<a class="block px-3 py-1 rounded hover:bg-black/10" href="/profile">👤 Profile</a>
 				</li>
-				<li class="mr-3">
-					<button on:click={logout}>Logout</button>
+				<li>
+					<form action="/logout" method="POST" use:enhance>
+						<button class="block px-3 py-1 rounded hover:bg-black/10" type="submit"
+							>🚪 Log out</button
+						>
+					</form>
+				</li>
+			{:else}
+				<li>
+					<a class="block px-3 py-1 rounded hover:bg-black/10" href="/login">🔑 Log in</a>
+				</li>
+				<li>
+					<a class="block px-3 py-1 rounded hover:bg-black/10" href="/register">🔨 Register</a>
 				</li>
 			{/if}
 		</ul>

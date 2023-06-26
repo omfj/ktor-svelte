@@ -11,22 +11,28 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import io.ktor.server.sessions.clear
 import io.ktor.server.sessions.sessions
+import java.util.*
 import kotlinx.serialization.Serializable
 import no.uib.echo.CryptoService
 import no.uib.echo.plugins.UserSession
-import no.uib.echo.plugins.createSession
 import no.uib.echo.schema.Users
+import no.uib.echo.schema.Sessions as DBSessions
+import no.uib.echo.utils.UUIDSerializer
 
 fun Application.sessionRoutes() {
     routing {
         login()
         logout()
         register()
+        getUserBySession()
     }
 }
 
 @Serializable
-data class LoginRequest(val username: String, val password: String)
+data class LoginRequest(
+    val username: String,
+    val password: String
+)
 
 fun Route.login() {
     post("/login") {
@@ -39,16 +45,15 @@ fun Route.login() {
 
         val user = Users.validateUser(username, password)
 
-        println("Found user with username: ${user?.username}")
-
         if (user == null) {
             call.respond(HttpStatusCode.BadRequest, "Invalid username or password")
             return@post
         }
 
-        createSession(call, user.id)
+        val session = DBSessions.create(user.id)
 
-        call.respond(HttpStatusCode.OK, "Successful login")
+        // TODO: Fix so we don't have to convert to string
+        call.respond(HttpStatusCode.OK, session.id.toString())
     }
 }
 
@@ -72,14 +77,15 @@ fun Route.register() {
         }
 
         val user = Users.create(
-            username = username,
-            email = email,
-            hashedPassword = hashedPassword,
+                username = username,
+                email = email,
+                hashedPassword = hashedPassword,
             )
 
-        createSession(call, user.id)
+        val session = DBSessions.create(user.id)
 
-        call.respond(HttpStatusCode.OK, "Successful registration")
+        // TODO: Fix so we don't have to convert to string
+        call.respond(HttpStatusCode.OK, session.id.toString())
     }
 }
 
@@ -87,6 +93,32 @@ fun Route.logout() {
     post("/logout") {
         call.sessions.clear<UserSession>()
         call.respond(HttpStatusCode.OK, "Successful logout")
+    }
+}
+
+@Serializable
+data class SessionRequest(
+    @Serializable(with = UUIDSerializer::class)
+    val session: UUID,
+)
+
+fun Route.getUserBySession() {
+    post("/session") {
+        val (session) = try {
+            call.receive<SessionRequest>()
+        } catch (e: CannotTransformContentToTypeException) {
+            call.respond(HttpStatusCode.BadRequest, "Invalid request")
+            return@post
+        }
+
+        val user = Users.getBySession(session)
+
+        if (user == null) {
+            call.respond(HttpStatusCode.BadRequest, "Invalid session")
+            return@post
+        }
+
+        call.respond(HttpStatusCode.OK, user)
     }
 }
 

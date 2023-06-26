@@ -1,4 +1,4 @@
-INSERT INTO happenings (uuid, title) VALUES
+INSERT INTO happenings (id, title) VALUES
     ('b3b3778d-87e6-41b7-8e7e-0a733a8025b6', 'Happening 1'),
     ('6d1aefe0-4e9f-4a0d-8b8b-823a80e4a5c7', 'Happening 2'),
     ('c7eef3b9-c8f6-45a8-a2c7-6a2c719c5422', 'Happening 3'),
