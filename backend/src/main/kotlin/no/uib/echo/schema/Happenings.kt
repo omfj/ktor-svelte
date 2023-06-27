@@ -22,10 +22,13 @@ data class Happening(
     val date: LocalDateTime,
 )
 
-object Happenings : Table() {
+object Happenings : Table("happenings") {
     val id: Column<UUID> = uuid("id").autoGenerate()
     val title: Column<String> = varchar("title", length = 50)
     val date: Column<LocalDateTime> = datetime("date").defaultExpression(CurrentDateTime)
+    val registerStart: Column<LocalDateTime> = datetime("register_start").defaultExpression(CurrentDateTime)
+    val registerEnd: Column<LocalDateTime> = datetime("register_end").defaultExpression(CurrentDateTime)
+    val event_restrictions: Column<Int> = integer("event_restrictions") references EventRestrictions.id
 
 
     override val primaryKey = PrimaryKey(id)

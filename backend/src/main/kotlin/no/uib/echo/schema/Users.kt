@@ -34,7 +34,7 @@ data class UserProfile(
     val email: String,
 )
 
-object Users : Table() {
+object Users : Table("users") {
     val id: Column<UUID> = uuid("id").autoGenerate()
     val username: Column<String> = varchar("username", length = 50).uniqueIndex().index("username_index")
     val email: Column<String> = varchar("email", length = 50).uniqueIndex().index("email_index")

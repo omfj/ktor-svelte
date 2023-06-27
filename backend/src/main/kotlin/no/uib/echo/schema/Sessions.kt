@@ -28,7 +28,7 @@ data class Session(
     val expires: LocalDateTime
 )
 
-object Sessions : Table() {
+object Sessions : Table("sessions") {
     val id = uuid("id").autoGenerate()
     val userId = uuid("user_id") references Users.id
     val expires = datetime("expires")

@@ -1,9 +1,20 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import toast from 'svelte-french-toast';
 	import type { ActionData, PageServerData } from './$types';
 
 	export let data: PageServerData;
 	export let form: ActionData;
+
+	$: {
+		if (form?.success === true) {
+			toast.success(form.message);
+		}
+
+		if (form?.success === false) {
+			toast.error('Noe gikk galt!');
+		}
+	}
 </script>
 
 <p class="text-xs text-gray-500">{data.event.id}</p>

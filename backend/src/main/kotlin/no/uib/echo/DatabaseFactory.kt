@@ -2,14 +2,26 @@ package no.uib.echo
 
 import io.ktor.server.config.ApplicationConfig
 import kotlinx.coroutines.Dispatchers
+import no.uib.echo.schema.EventRestrictions
+import no.uib.echo.schema.Groups
 import no.uib.echo.schema.Happenings
 import no.uib.echo.schema.Sessions
 import no.uib.echo.schema.User
+import no.uib.echo.schema.UserGroups
 import no.uib.echo.schema.Users
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
+
+val ALL_TABLES = arrayOf(
+    Happenings,
+    Users,
+    Sessions,
+    UserGroups,
+    Groups,
+    EventRestrictions,
+)
 
 object DatabaseFactory {
     fun init(config: ApplicationConfig) {
@@ -27,17 +39,9 @@ object DatabaseFactory {
         )
 
         transaction(database) {
-            SchemaUtils.drop(
-                Happenings,
-                Users,
-                Sessions,
-            )
+            SchemaUtils.drop(*ALL_TABLES)
 
-            SchemaUtils.create(
-                Happenings,
-                Users,
-                Sessions,
-            )
+            SchemaUtils.create(*ALL_TABLES)
         }
     }
 

@@ -3,6 +3,7 @@
 	import { user } from '$lib/stores';
 	import Header from '../lib/components/Header.svelte';
 	import type { LayoutServerData } from './$types';
+	import { Toaster } from 'svelte-french-toast';
 
 	export let data: LayoutServerData;
 
@@ -14,3 +15,5 @@
 <main class="max-w-2xl w-full mx-auto px-3">
 	<slot />
 </main>
+
+<Toaster />
